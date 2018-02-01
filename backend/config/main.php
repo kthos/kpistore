@@ -11,16 +11,28 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        /**NONT**/
+        /*'user' => [
+            'class' => 'dektrium\user\Module',
+            //'enableUnconfirmedLogin' => false,
+            //'confirmWithin' => 21600,
+            //'cost' => 12,
+            //'admins' => ['admin']
+            'modelMap' => [
+                'RegistrationForm' => 'backend\models\RegistrationForm',
+            ]
+        ],*/           
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
-        /*'user' => [
+        'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
-        ],*/
+        ],
               
                 
         'session' => [
@@ -49,21 +61,6 @@ return [
         */
     ],
     
-    /**NONT**/
-    /*
-    'modules' => [
-        'user' => [
-            'class' => 'dektrium\user\Module',
-            //'enableUnconfirmedLogin' => false,
-            //'confirmWithin' => 21600,
-            //'cost' => 12,
-            //'admins' => ['admin']
-            'modelMap' => [
-                'RegistrationForm' => 'backend\models\RegistrationForm',
-            ]
-        ],
-    ],
-    */
-    
+        
     'params' => $params,
 ];

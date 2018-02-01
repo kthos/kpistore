@@ -9,7 +9,6 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -30,43 +29,34 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<span class="glyphicon glyphicon-home"></span>  '. Yii::$app->name,
+        'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'nav-wrapper',
-        ],        
+            'class' => 'navbar-inverse navbar-fixed-top',
+        ],
     ]);
     $menuItems = [
-        ['label' => '<span class="glyphicon glyphicon-home"></span>  Home', 'url' => ['/site/index']],
-        ['label' => '<span class="glyphicon glyphicon-phone-alt"></span>  About', 'url' => ['/site/about']],
-        ['label' => '<span class="glyphicon glyphicon-envelope"></span>  Contact', 'url' => ['/site/contact']],
+        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                '<span class="glyphicon glyphicon-off"></span>  Logout (' . Yii::$app->user->identity->username . ')',
+                'Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
             . '</li>';
     }
     echo Nav::widget([
-        'encodeLabels' => false, // 'encodeLabels' => false, for Appear icon in front of menu
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
     ]);
-    
-    /*echo \kartik\widgets\SideNav::widget([
-        'options' => ['class' => 'side-nav' , 'id' => 'mobile-demo'],
-        'heading' => '<i class="glyphicon glyphicon-cog"></i> Operations',
-        'items' => $menuItems, 
-    ]);*/
-
-    
     NavBar::end();
     ?>
 
