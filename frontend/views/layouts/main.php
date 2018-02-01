@@ -42,8 +42,8 @@ AppAsset::register($this);
         ['label' => '<span class="glyphicon glyphicon-envelope"></span>  Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Signup', 'url' => ['/user/registration/register']];
+        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Login', 'url' => ['/user/security/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
