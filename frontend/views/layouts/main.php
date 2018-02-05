@@ -27,33 +27,42 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
+<!--div class="nav-wrapper"-->
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => '<span class="glyphicon glyphicon-home"></span>  '. Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
+            //'class' => 'brand-logo',
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => '<span class="glyphicon glyphicon-home"></span>  Home', 'url' => ['/site/index']],
+        ['label' => '<span class="glyphicon glyphicon-phone-alt"></span>  About', 'url' => ['/site/about']],
+        ['label' => '<span class="glyphicon glyphicon-envelope"></span>  Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
+        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Signup', 'url' => ['/user/registration/register']];
+        $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Login', 'url' => ['/user/security/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/security/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                '<span class="glyphicon glyphicon-off"></span>  Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
             . '</li>';
+            /*['label' =>'<span class="glyphicon glyphicon-off"></span>  Logout (' . Yii::$app->user->identity->username . ')'
+             ,'url' => ['/user/security/logout']
+             ,'linkOptions' => ['data-method' => 'post']
+             ,'class' => 'logout'
+            ];*/
     }
+    
     echo Nav::widget([
+        'encodeLabels' => false, // 'encodeLabels' => false, for Appear icon in front of menu
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
     ]);

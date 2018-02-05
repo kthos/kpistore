@@ -45,14 +45,19 @@ AppAsset::register($this);
         $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Signup', 'url' => ['/user/registration/register']];
         $menuItems[] = ['label' => '<span class="glyphicon glyphicon-user"></span>  Login', 'url' => ['/user/security/login']];
     } else {
-        $menuItems[] = '<li>'
+        $menuItems[] = /*'<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
                 '<span class="glyphicon glyphicon-off"></span>  Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
-            . '</li>';
+            . '</li>';*/
+            ['label' =>'<span class="glyphicon glyphicon-off"></span>  Logout (' . Yii::$app->user->identity->username . ')'
+             ,'url' => ['/user/security/logout']
+             ,'linkOptions' => ['data-method' => 'post']
+             ,'class' => 'logout'
+            ];
     }
     echo Nav::widget([
         'encodeLabels' => false, // 'encodeLabels' => false, for Appear icon in front of menu
