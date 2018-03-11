@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-03-11 13:06:42
+Date: 2018-03-11 23:14:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,12 +31,11 @@ CREATE TABLE `kpi_archive` (
   `success_date` date DEFAULT NULL COMMENT 'งานเสร็จวันที่',
   `create_date` timestamp NULL DEFAULT current_timestamp() COMMENT 'สร้างวันที่',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of kpi_archive
 -- ----------------------------
-INSERT INTO `kpi_archive` VALUES ('20', '132', 'ตัวชี้วัดทดสอบ1', 'รายละเอียดทดสอบ', null, 'เอกสารทดสอบ', null, null, null, null);
 
 -- ----------------------------
 -- Table structure for migration
