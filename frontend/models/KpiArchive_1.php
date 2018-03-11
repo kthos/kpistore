@@ -124,21 +124,22 @@ class KpiArchive extends \yii\db\ActiveRecord
     
     
     public function listDownloadFiles($type){
-     $docs_file = '';
-     if(in_array($type, ['docs','covenant'])){         
+        $docs_file = '';
+         if(in_array($type, ['docs','covenant'])){
              $data = $type==='docs'?$this->docs:$this->covenant;
-             $files = Json::decode($data);
+            $files = Json::decode($data);
             if(is_array($files)){
-                 $docs_file ='<ul>';
-                 foreach ($files as $key => $value) {
-                    $docs_file .= '<li>'.Html::a($value,['/kpi-archive/download','id'=>$this->id,'file'=>$key,'file_name'=>$value],['target'=>'_blank']).'</li>';
-                 }
-                 $docs_file .='</ul>';
+                $docs_file ='<ul>';
+                foreach ($files as $key => $value) {
+                    //$docs_file .= '<li>'.Html::a($value,['/kpi-archive/download','id'=>$this->id,'file'=>$key,'file_name'=>$value]).'</li>';
+                    $docs_file .= '<li>'.Html::a($value,['/kpiarchive/download','id'=>$this->id,'file'=>$key,'file_name'=>$value]).'</li>';
+                }
+                $docs_file .='</ul>';
             }
-     }
-     
-     return $docs_file;
+        }
+         return $docs_file;
     }
+
 
 
 }

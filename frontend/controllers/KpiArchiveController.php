@@ -14,6 +14,7 @@ use yii\helpers\BaseFileHelper;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 
+
 /**
  * KpiArchiveController implements the CRUD actions for KpiArchive model.
  */
@@ -135,6 +136,13 @@ class KpiArchiveController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        /*$model = $this->findModel($id);
+        //remove upload file & data
+        $this->removeUploadDir($model->ref);
+        Uploads::deleteAll(['ref'=>$model->ref]);
+
+        $model->delete();*/
+
 
         return $this->redirect(['index']);
     }
@@ -154,6 +162,41 @@ class KpiArchiveController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
+    
+    public function actionDeletefile($id,$field,$fileName){
+        $status = ['success'=>false];
+        if(in_array($field, ['docs','covenant'])){
+            $model = $this->findModel($id);
+            $files =  Json::decode($model->{$field});
+            if(array_key_exists($fileName, $files)){
+                if($this->deleteFile('file',$model->ref,$fileName)){
+                    $status = ['success'=>true];
+                    unset($files[$fileName]);
+                    $model->{$field} = Json::encode($files);
+                    $model->save();
+                }
+            }
+        }
+        echo json_encode($status);
+    }
+
+    private function deleteFile($type='file',$ref,$fileName){
+        if(in_array($type, ['file','thumbnail'])){
+            if($type==='file'){
+               $filePath = Freelance::getUploadPath().$ref.'/'.$fileName;
+            } else {
+               $filePath = Freelance::getUploadPath().$ref.'/thumbnail/'.$fileName;
+            }
+            @unlink($filePath);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }    
+    
     
     private function uploadSingleFile($model,$tempFile=null){
         $file = [];
@@ -207,5 +250,22 @@ class KpiArchiveController extends Controller
     return;
 }
 
+
+
+    
+    public function actionDownload($id,$file,$file_name){
+    $model = $this->findModel($id);
+     if(!empty($model->ref) && !empty($model->covenant)){
+            Yii::$app->response->sendFile($model->getUploadPath().'/'.$model->ref.'/'.$file,$file_name);
+    }else{
+        $this->redirect(['/kpi-archive/view','id'=>$id]);
+    }
+}
+
+
+    private function removeUploadDir($dir){
+        BaseFileHelper::removeDirectory(KpiArchive::getUploadPath().$dir);
+    }
+    
 
 }

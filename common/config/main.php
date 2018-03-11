@@ -1,5 +1,6 @@
 <?php
 return [
+    //'name' => 'Klongthom Hospital KPI',
     'name' => 'Klongthom Hospital KPI',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
