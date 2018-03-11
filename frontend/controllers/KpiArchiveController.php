@@ -8,6 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+//.....
+use yii\web\UploadedFile;
+use yii\helpers\BaseFileHelper;
+use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 /**
  * KpiArchiveController implements the CRUD actions for KpiArchive model.
@@ -66,10 +71,25 @@ class KpiArchiveController extends Controller
     {
         $model = new KpiArchive();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        }
+        }*/
+        //.............
+        if ($model->load(Yii::$app->request->post()) ) {
 
+            $this->CreateDir($model->ref);
+
+            $model->covenant = $this->uploadSingleFile($model);
+            $model->docs = $this->uploadMultipleFile($model);
+
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+        } else {
+            $model->ref = substr(Yii::$app->getSecurity()->generateRandomString(),10);
+        }
+        //.............
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -86,10 +106,20 @@ class KpiArchiveController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }*/
+        //.............
+        $tempCovenant = $model->covenant;
+        $tempDocs     = $model->docs;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->covenant = $this->uploadSingleFile($model,$tempCovenant);
+            $model->docs = $this->uploadMultipleFile($model,$tempDocs);
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
-
+        //.............
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -124,4 +154,58 @@ class KpiArchiveController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+    
+    private function uploadSingleFile($model,$tempFile=null){
+        $file = [];
+        $json = '';
+        try {
+             $UploadedFile = UploadedFile::getInstance($model,'covenant');
+             if($UploadedFile !== null){
+                 $oldFileName = $UploadedFile->basename.'.'.$UploadedFile->extension;
+                 $newFileName = md5($UploadedFile->basename.time()).'.'.$UploadedFile->extension;
+                 $UploadedFile->saveAs(KpiArchive::UPLOAD_FOLDER.'/'.$model->ref.'/'.$newFileName);
+                 $file[$newFileName] = $oldFileName;
+                 $json = Json::encode($file);
+             }else{
+                $json=$tempFile;
+             }
+        } catch (Exception $e) {
+            $json=$tempFile;
+        }
+        return $json ;
+    }
+    
+    private function uploadMultipleFile($model,$tempFile=null){
+            $files = [];
+            $json = '';
+            $tempFile = Json::decode($tempFile);
+            $UploadedFiles = UploadedFile::getInstances($model,'docs');
+            if($UploadedFiles!==null){
+               foreach ($UploadedFiles as $file) {
+                   try {   $oldFileName = $file->basename.'.'.$file->extension;
+                           $newFileName = md5($file->basename.time()).'.'.$file->extension;
+                           $file->saveAs(KpiArchive::UPLOAD_FOLDER.'/'.$model->ref.'/'.$newFileName);
+                           $files[$newFileName] = $oldFileName ;
+                   } catch (Exception $e) {
+
+                   }
+               }
+               $json = json::encode(ArrayHelper::merge($tempFile,$files));
+            }else{
+               $json = $tempFile;
+            }
+           return $json;
+   }
+   
+   private function CreateDir($folderName){
+    if($folderName != NULL){
+        $basePath = KpiArchive::getUploadPath();
+        if(BaseFileHelper::createDirectory($basePath.$folderName,0777)){
+            BaseFileHelper::createDirectory($basePath.$folderName.'/thumbnail',0777);
+        }
+    }
+    return;
+}
+
+
 }

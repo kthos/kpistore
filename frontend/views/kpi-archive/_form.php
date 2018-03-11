@@ -26,7 +26,7 @@ use kartik\widgets\FileInput;
                 'allowedFileExtensions'=>['pdf'],
                 'showPreview' => true,
                 'showRemove' => true,
-                'showUpload' => false
+                'showUpload' => true
                 ] 
           ]); ?>
 
@@ -43,7 +43,8 @@ use kartik\widgets\FileInput;
                 'showPreview' => true,
                 'showCaption' => true,
                 'showRemove' => true,
-                'showUpload' => false
+                'showUpload' => true,
+                'overwriteInitial'=>false
             ]
         ]); ?>
         

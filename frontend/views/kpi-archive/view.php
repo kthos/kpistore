@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\web\UploadedFile;
+use yii\helpers\BaseFileHelper;
+use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\KpiArchive */
@@ -34,11 +38,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             'covenant',
             'docs:ntext',
+            //['attribute'=>'covenant','value'=>$model->listDownloadFiles('covenant'),'format'=>'html'],
+            //['attribute'=>'docs','value'=>$model->listDownloadFiles('docs'),'format'=>'html'],
             'start_date',
             'end_date',
             'success_date',
             'create_date',
         ],
     ]) ?>
+    
+    
+    <div class="form-group">
+       <?= Html::a(Yii::t('app','<i class="glyphicon glyphicon-plus"></i> '.'OK')
+               , ['/kpi-archive/index']
+               , ['class' => 'btn btn-success'.' btn-lg btn-block'])?>
+    </div>
+
 
 </div>
