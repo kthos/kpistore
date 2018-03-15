@@ -39,14 +39,14 @@ class KpiArchiveController extends Controller
                 'only' => ['index','view','create','update', 'delete','deletefile','download'],//action ทั้งหมดที่มี
                 'rules' => [
                     [
-                        'actions' => ['index','view','signup'],
+                        'actions' => ['index','view','download','signup'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?'],//ยังไม่ log in ใช้งาน Action index,view,download,signup 
                     ],
                     [
                         'actions' => ['index','view','create','update', 'delete','deletefile','download','logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'],//log in แล้ว ใช้งานActionทั้งหมดที่มี
                     ],
                 ],
             ],
