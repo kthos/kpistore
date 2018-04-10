@@ -6,6 +6,11 @@ use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
+use yii2assets\pdfjs;
+use frontend\controllers\KpiArchiveController;
+
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\KpiArchive */
@@ -39,14 +44,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             //'covenant',
             //'docs:ntext',
-            ['attribute'=>'covenant','value'=>$model->listDownloadFiles('covenant'),'format'=>'html'],
-            ['attribute'=>'docs','value'=>$model->listDownloadFiles('docs'),'format'=>'html'],
+            //['attribute'=>'covenant','value'=>$model->listDownloadFiles('covenant'),'format'=>'html'],//original code by dixonsatit 
+            //['attribute'=>'docs','value'=>$model->listDownloadFiles('docs'),'format'=>'html'],//original code by dixonsatit 
+            ['attribute'=>'covenant','value'=>$model->ViewPdf('covenant'),'format'=>'html',['target'=>'_blank']],//Edit by nont
+            ['attribute'=>'docs','value'=>$model->ViewPdf('docs'),'format'=>'html'],//Edit by nont
+            
             'start_date',
             'end_date',
             'success_date',
             'create_date',
         ],
     ]) ?>
+
+<!--/****************************************************************/-->    
+<?php
+Modal::begin([
+    'header' => '<h2>Hello world</h2>',
+    'toggleButton' => ['label' => 'click me'],
+]);
+echo \yii2assets\pdfjs\PdfJs::widget([
+  //'url' => Url::base().'/downloads/manualStart_up.pdf'
+  //'url' => Url::base().'/kpiarchive/'.$model->ref.'/d55a847e30b2cc59a631fdd412fddeae.pdf'
+  'url' => Url::base().'/kpi-archive/pdfview'
+]);
+
+Modal::end();
+?>
+<!--/****************************************************************/-->   
+    
     
     
     <div class="form-group">

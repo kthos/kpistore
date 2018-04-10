@@ -86,9 +86,9 @@ class KpiArchive extends \yii\db\ActiveRecord
     
     
     
-    //...........
+    //..........................................................
     const UPLOAD_FOLDER = 'kpiarchive';
-    //...........
+    //..........................................................
     public static function getUploadPath(){
          return Yii::getAlias('@webroot').'/'.self::UPLOAD_FOLDER.'/';
     }
@@ -122,7 +122,7 @@ class KpiArchive extends \yii\db\ActiveRecord
     return $initial;
     }
     
-    
+ //original code by dixonsatit  
     public function listDownloadFiles($type){
      $docs_file = '';
      if(in_array($type, ['docs','covenant'])){         
@@ -140,5 +140,42 @@ class KpiArchive extends \yii\db\ActiveRecord
      return $docs_file;
     }
 
-
+    
+/****************************************************************/
+    //Edit by nont
+    public function ViewPdf($type){
+     $docs_file = '';
+     if(in_array($type, ['docs','covenant'])){         
+             $data = $type==='docs'?$this->docs:$this->covenant;
+             $files = Json::decode($data);
+            if(is_array($files)){
+                 $docs_file ='<ul>';
+                 foreach ($files as $key => $value) {
+                    $docs_file .= '<li>'.Html::a($value,['/kpi-archive/pdfview','id'=>$this->id,'file'=>$key,'file_name'=>$value],['target'=>'_blank']).'</li>';
+                    //$docs_file .= '<li>'.Html::a($value,['/kpi-archive/pdfview','id'=>$this->id,'file'=>$key]).'</li>';
+                 }
+                 $docs_file .='</ul>';
+            }
+     }     
+     return $docs_file;
+    }
+    /*
+    public function ViewPdffile($type){
+     $docs_file = '';
+     if(in_array($type, ['docs','covenant'])){         
+             $data = $type==='docs'?$this->docs:$this->covenant;
+             $files = Json::decode($data);
+            if(is_array($files)){
+                 $docs_file ='<ul>';
+                 foreach ($files as $key => $value) {
+                    $docs_file .= '<li>'.Html::a($value,['/kpi-archive/pdfviewfile','id'=>$this->id,'file'=>$key,'file_name'=>$value],['target'=>'_blank']).'</li>';
+                    //$docs_file .= '<li>'.Html::a($value,['/kpi-archive/pdfview','id'=>$this->id,'file'=>$key]).'</li>';
+                 }
+                 $docs_file .='</ul>';
+            }
+     }     
+     return $docs_file;
+    }*/
+/****************************************************************/    
+    
 }

@@ -184,7 +184,7 @@ class KpiArchiveController extends Controller
 
 
     
-    public function actionDeletefile($id,$field,$fileName){
+public function actionDeletefile($id,$field,$fileName){
         $status = ['success'=>false];
         if(in_array($field, ['docs','covenant'])){
             $model = $this->findModel($id);
@@ -199,14 +199,14 @@ class KpiArchiveController extends Controller
             }
         }
         echo json_encode($status);
-    }
+}
 
-    private function deleteFile($type='file',$ref,$fileName){
+private function deleteFile($type='file',$ref,$fileName){
         if(in_array($type, ['file','thumbnail'])){
             if($type==='file'){
-               $filePath = Freelance::getUploadPath().$ref.'/'.$fileName;
+               $filePath = KpiArchive::getUploadPath().$ref.'/'.$fileName;
             } else {
-               $filePath = Freelance::getUploadPath().$ref.'/thumbnail/'.$fileName;
+               $filePath = KpiArchive::getUploadPath().$ref.'/thumbnail/'.$fileName;
             }
             @unlink($filePath);
             return true;
@@ -214,10 +214,10 @@ class KpiArchiveController extends Controller
         else{
             return false;
         }
-    }    
+}    
     
     
-    private function uploadSingleFile($model,$tempFile=null){
+private function uploadSingleFile($model,$tempFile=null){
         $file = [];
         $json = '';
         try {
@@ -235,9 +235,9 @@ class KpiArchiveController extends Controller
             $json=$tempFile;
         }
         return $json ;
-    }
+}
     
-    private function uploadMultipleFile($model,$tempFile=null){
+private function uploadMultipleFile($model,$tempFile=null){
             $files = [];
             $json = '';
             $tempFile = Json::decode($tempFile);
@@ -257,9 +257,9 @@ class KpiArchiveController extends Controller
                $json = $tempFile;
             }
            return $json;
-   }
+}
    
-   private function CreateDir($folderName){
+private function CreateDir($folderName){
     if($folderName != NULL){
         $basePath = KpiArchive::getUploadPath();
         if(BaseFileHelper::createDirectory($basePath.$folderName,0777)){
@@ -271,8 +271,12 @@ class KpiArchiveController extends Controller
 
 
 
-    
-    public function actionDownload($id,$file,$file_name){
+private function removeUploadDir($dir){
+        BaseFileHelper::removeDirectory(KpiArchive::getUploadPath().$dir);
+}
+
+//original code by dixonsatit     
+public function actionDownload($id,$file,$file_name){
     $model = $this->findModel($id);
      if(!empty($model->ref) && !empty($model->covenant)){
             Yii::$app->response->sendFile($model->getUploadPath().'/'.$model->ref.'/'.$file,$file_name);
@@ -282,9 +286,30 @@ class KpiArchiveController extends Controller
 }
 
 
-    private function removeUploadDir($dir){
-        BaseFileHelper::removeDirectory(KpiArchive::getUploadPath().$dir);
+/****************************************************************/
+//Edit by nont
+public function actionPdfview($id,$file,$file_name){
+    $model = $this->findModel($id);
+     if(!empty($model->ref) && !empty($model->covenant)){
+            //Yii::$app->response->sendFile($model->getUploadPath().'/'.$model->ref.'/'.$file);
+            Yii::$app->response->redirect($model->getUploadUrl().$model->ref.'/'.$file);
+    }else{
+        $this->redirect(['/kpi-archive/view','id'=>$id]);
     }
-    
+}
+
+/*public function actionPdfviewfile($id,$file,$file_name){
+    $model = $this->findModel($id);
+    $pdf = '';
+     if(!empty($model->ref) && !empty($model->covenant)){
+            //Yii::$app->response->sendFile($model->getUploadPath().'/'.$model->ref.'/'.$file);
+         $pdf = $model->getUploadUrl().$model->ref.'/'.$file;  
+         Yii::$app->response->redirect($pdf);
+    }else{
+        $this->redirect(['/kpi-archive/view','id'=>$id]);
+    }
+}*/
+
+/****************************************************************/
 
 }

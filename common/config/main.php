@@ -20,7 +20,6 @@ return [
             'timeFormat' => 'php:H;i:s',
             'timeZone' => 'Asia/Bangkok',        
         ],
-
     ],
     
     /**NONT**/
@@ -28,7 +27,8 @@ return [
     'modules' => [
         'user' => [
             'class' => 'dektrium\user\Module',
-            'enableUnconfirmedLogin' => true,
+            //'enableUnconfirmedLogin' => true,
+            'enableConfirmation' => true,
             'confirmWithin' => 21600,
             'cost' => 12,
             'admins' => ['admin'],
@@ -36,6 +36,11 @@ return [
                 'RegistrationForm' => 'common\models\RegistrationForm',
             ]
         ],
+        
+        'pdfjs' => [
+            'class' => '\yii2assets\pdfjs\Module',
+         ],
+        
     ],
     
 ];
